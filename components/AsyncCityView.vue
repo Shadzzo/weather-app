@@ -5,7 +5,7 @@
             <h1 id="temp-info">{{ weatherData.data.current_weather.temperature }} ° C</h1>
             <div>
                 <img :src="setWeatherIcon(weatherData.data.current_weather.weathercode)" alt="Current weather icon" id="current-img">
-                <p></p>
+                <p class="weather-name">{{ weatherName }}</p>
             </div>
             <p> Feels like {{ weatherData.data.hourly.apparent_temperature[index] }} ° C</p>
             <div class="detailed-info">
@@ -83,36 +83,46 @@ const getWeatherData = async () => {
 
 let weatherData = await getWeatherData();
 let index = weatherData.data.hourly.time.indexOf(weatherData.data.current_weather.time);
+let weatherName = " ";
 
 const setWeatherIcon = (weatherCode) => {
     let rainyWeatherCodes = [51, 53, 55, 56, 57, 61]
     let showerRainCodes = [63, 65, 66, 67, 80, 81, 82]
     let snowCodes = [71, 73, 75, 77, 85, 86]
     if(weatherCode == 0){
+        weatherName = "Sunny";
         return images.clearSky;
     }
     if(weatherCode == 1){
+        weatherName = "Few Clouds";
         return images.fewClouds
     }
     if(weatherCode == 2){
+        weatherName = "Scattered Clouds";
         return images.scatteredClouds
     }
     if(weatherCode == 3){
+        weatherName = "Cloudy";
         return images.overcast
     }
     if(weatherCode == 45 || weatherCode == 48){
+        weatherName = "Foggy"
         return images.fog
     }
     if(rainyWeatherCodes.includes(weatherCode)){
+        weatherName = "Light Rain"
         return images.rain
     }
     if(showerRainCodes.includes(weatherCode)){
+        weatherName = "Rain Shower"
         return images.showerRain
     }
     if(snowCodes.includes(weatherCode)){
+        weatherName = "Snowy"
         return images.snow
     }
     if(weatherCode == 95 || weatherCode == 96 || weatherCode == 99){
+        weatherName = "Thunder Storm"
         return images.thunderstorm
     }
 }
@@ -130,6 +140,11 @@ watch(() => route.query, async () => {
 <style>
     a:hover{
         opacity: 0.8;
+    }
+    
+    .weather-name{
+        margin-top: -25px;
+        margin-bottom: 25px;
     }
     
     .weather-wrapper{
